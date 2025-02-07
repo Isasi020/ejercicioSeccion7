@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INICIO</title>
+    <link rel="stylesheet" href="/assets/css/index.css">
 </head>
-<body>
-    <H1>Para buscar info de peliculas introduce informacion</H1>
-    <a href="http://localhost:8080/api/movies/find?id=" class="button alt">Learn More</a>
 
-    
+<body>
+    <section>
+        <div>
+            <h1>Introduce el titulo de una película</h1>
+            <form id="buscarPeli" action="api/movies/search" method="GET">
+                <input type="text" id="searchInput" name="title">
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="/assets/js/main.js"></script>
+
 </body>
+
 </html>

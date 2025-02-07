@@ -1,9 +1,12 @@
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
+const path = require('path');
 
 const app = express();
 const puerto = process.env.PORT;
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 const Params = {
     method: "GET",
@@ -50,7 +53,7 @@ async function buscarPeliculaPorId(id) {
 }
 
 app.get('/', (req, res) => {
-    res.send('Inicio');
+    res.sendFile(path.join(__dirname, 'view', 'home.html'));
 });
 
 app.get('/api/movies/search', async (req, res) => {
