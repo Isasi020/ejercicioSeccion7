@@ -11,19 +11,28 @@
 <body>
     <section>
         <div>
-            <h1>Introduce el titulo de una película</h1>
             <form id="buscarPeli" action="api/movies/search" method="GET">
-                <input type="text" id="searchInput" name="title">
+                <div class="form-group">
+                    <label>Introduce el titulo de una película</label>
+                    <input type="text" id="searchInput" name="title">
+                </div>
                 <button type="submit">Enviar</button>
             </form>
+
+            <div class="container">
+                <ul id="moviesList">
+                </ul>
+            </div>
         </div>
     </section>
 
     <section>
         <div>
-            <h1>Introduce el id de una película</h1>
             <form id="buscarPeliPorId" action="api/movies/find" method="GET">
-                <input type="text" id="searchInput" name="id">
+                <div class="form-group">
+                    <label>Introduce el id de una película</label>
+                    <input type="text" id="searchInput" name="id">
+                </div>
                 <button type="submit">Enviar</button>
             </form>
         </div>
