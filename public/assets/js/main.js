@@ -1,13 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
-    $('form#buscarPeli').on('submit', async function (event) {
-        event.preventDefault();
 
-        const params = $(this).serialize();
-        const url = `${$(this).attr('action')}?${params}`;
-
+    async function formsubmit(form) {
+        const params = $(form).serialize();
+        const url = `${$(form).attr('action')}?${params}`;
         const call = await fetch(url);
         const response = await call.json();
-
+        return response
+    }
+    
+    $('form#buscarPeli').on('submit', async function (event) {
+        event.preventDefault();
+        const response = await formsubmit(this);
         const $moviesList = $('ul#moviesList');
 
         $moviesList.empty();
@@ -20,14 +23,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $('form#buscarPeliPorId').on('submit', async function (event) {
         event.preventDefault();
+        const response=  await formsubmit(this);
+        const $infoList= $('ul#infoList');
+        const $subList= $('ul#sublist');
 
-        const params = $(this).serialize();
-        const url = `${$(this).attr('action')}?${params}`;
+        console.log(response);
+        
+        $infoList.empty();
+        for(let propiedad in response){
+            if(propiedad==="Ratings"){
+                $infoList.append(`<li>${propiedad}</li>`);
 
-        const call = await fetch(url);
-        const response = await call.json();
+                response[propiedad].forEach(i => {
+                    for(let subPropiedad in i){
+                    $subList.append(`<li>${subPropiedad}, ${i[subPropiedad]}</li>`);
+                    }
+                });
+                $infoList.append($subList);
+            }else{
+                $infoList.append(`<li>${propiedad}, ${response[propiedad]}</li>`);
 
-        alert(JSON.stringify(response, null, 2));
-
+            }
+        }
     });
 });
