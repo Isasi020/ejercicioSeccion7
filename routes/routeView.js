@@ -1,8 +1,8 @@
 const{ Router} = require('express');
 const router  =  Router();
-const { ctrlPaginaInicio, ctrlPaginaNoEncontrada} = require('../controllers/ctrls');
+const controladorMetodos = require('../controllers/ctrls');
 
-router.get('/', ctrlPaginaInicio);
-router.get('*', ctrlPaginaNoEncontrada);
+router.get('/', controladorMetodos.ctrlPaginaInicio);
+router.get('*', controladorMetodos.ctrlPaginaNoEncontrada);
 
 module.exports = router;

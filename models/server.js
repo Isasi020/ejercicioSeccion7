@@ -22,7 +22,7 @@ class Server {
   }
 
   getRouteApi(){
-    this.app.use("/api/movies", routeApi);
+    this.app.use(this.moviePath, routeApi);
   }
 
   getRouteView(){
