@@ -1,83 +1,46 @@
 const path = require('path');
-const { buscarPelicula, buscarPeliculaPorId} = require('../models/busquedas');
+const Pelicula = require('../models/pelicula');
 
-const parametrosBuscarPeliculas = async (req, res, title) =>{
-
-    if (!title) {
-        return res.status(400).json({ error: "Debes proporcionar un título para buscar" });
-    }
-
-    try {
-        const pelicula = await buscarPelicula(title);
-        if (pelicula) {
-            res.json(pelicula);
-        } else {
-            res.status(404).json({ error: 'No se encontraron resultados' });
-        }
-    } catch (error) {
-        console.error('Error al obtener datos de RapidAPI:', error);
-        return res.status(500).json({ error: "Error interno del servidor" });
-    }
+const getListaPeliculas = async (req, res) => {
+    const lista = await Pelicula.find();
+    res.json({
+        msg: 'GET-API -CONTROLADOR',
+        lista
+    });
 };
 
-const paramtrosBuscarPeliculasPorId = async(req, res, id)=>{
-    if (!id) {
-        return res.status(400).json({ error: "Debes proporcionar un id para buscar" });
-    }
+const postPelicula = async (req, res) => {
+    const { titulo, año, portada, categoria } = req.body;
+    const nuevaPelicula = new Pelicula ({titulo, año, portada, categoria});
+    await nuevaPelicula.save();
 
-    try {
-        const pelicula = await buscarPeliculaPorId(id);
-        if (pelicula) {
-            res.json(pelicula);
-        } else {
-            res.status(404).json({ error: 'No se encontraron resultados' });
-        }
-    } catch (error) {
-        console.error('Error al obtener datos de RapidAPI:', error);
-    }
-}
-
-const ctrlListarPeliculas= async (req, res) => {
-    const { title } = req.query; 
-    parametrosBuscarPeliculas(req, res, title);
+    res.json({
+        msg: 'POST API - CONTROLADOR',
+        nuevaPelicula
+        });
 };
 
-const ctrlBuscarInfoPeliId = async (req, res) => {
-    const { id } = req.query;
-    paramtrosBuscarPeliculasPorId(req, res, id);
+const deletePelicula = async(req, res) => {
+    const {id} = req.query;
+    const idPelicula = await Pelicula.findByIdAndDelete(id);
+
+    res.json({
+        msg: 'DELETE API - CONTROLADOR',
+        mensajeConfirmacion: `Pelicula con id ${id}, eliminada con exito`,
+        idPelicula
+    })
 };
 
-const postBuscarPeliculas = async (req, res) => {
-    const { title } = req.body;
-    parametrosBuscarPeliculas(req, res, title);
-    // paramtrosBuscarPeliculasPorId(req, res, id);
-
-};
-
-const postBuscarInfoPelicula = async(req, res) => {
-    const {id}= req.body; 
-    paramtrosBuscarPeliculasPorId(req, res, id);
-};
-
-const ctrlMockDelete = async (req, res) => {
-    const {id} = req.query
-    if (!id) {
-        return res.status(400).json({ error: "Debes proporcionar un id para eliminar" });
-    }else{
-        res.json(`pelicula con id: ${id} eliminada con exito`);
-    }
-};
-
-
-const ctrlMockUpdate = async (req, res) => {
-  const { id } = req.query;
-  if (!id) {
-    return res
-      .status(400)
-      .json({ error: "Debes proporcionar un id para editar" });
-  } else {
-    res.json(`pelicula con id: ${id} editada con exito`);
-  }
+const putPelicula = async (req, res) =>{
+    const { id } = req.params; 
+    const { _id, __v, ...resto } = req.body;
+    const pelicula = await Pelicula.findByIdAndUpdate(id, resto);
+    
+    res.json({
+        msg: 'PUT API - CONTROLADOR',
+        mensajeConfirmacion: `Pelicula con id ${id}, actualizada con exito`,
+        pelicula
+    })
 };
 
 const ctrlPaginaInicio = (req, res) => {
@@ -90,13 +53,11 @@ const ctrlPaginaNoEncontrada = (req, res) => {
 
 const controladorMetodos = {
     ctrlPaginaInicio,
-    ctrlBuscarPeli: ctrlListarPeliculas,
-    ctrlBuscarInfoPeli: ctrlBuscarInfoPeliId,
-    postBuscarPeliculas,
-    postBuscarInfoPelicula,
     ctrlPaginaNoEncontrada,
-    ctrlMockUpdate, 
-    ctrlMockDelete
+    postPelicula,
+    getListaPeliculas,
+    deletePelicula,
+    putPelicula
 }
 
 module.exports = controladorMetodos;
