@@ -1,15 +1,15 @@
 const{ Router} = require('express');
-const{ check } = require('express-validator');
+const{ check, checkSchema} = require('express-validator');
 const { esPeliculaValida, esCategoriaValida, esIdValido } = require ('../helpers/db.validators');
 const { validarCampos } = require('../middlewares/validar-campos');
 const controladorMetodos = require('../controllers/ctrls');
 const router  =  Router();
 
-router.get('/getListaPeliculas', controladorMetodos.getListaPeliculas);
+router.get('/list', controladorMetodos.getListaPeliculas);
 
-router.post('/postPelicula',
+router.post('/createCheck',
     [
-        check('titulo', 'El titulo de pelicula es obligatorio').not().isEmpty(),
+        check('titulo', 'El titulo de pelicula es obligatorio').contains(),
         check('titulo', 'El titulo debe tener menos de 250 caracteres').isLength({max:250}),
         check('titulo').custom(esPeliculaValida),
 
@@ -23,8 +23,50 @@ router.post('/postPelicula',
 
     ], controladorMetodos.postPelicula);
 
+    router.post('/createJsonValidation', checkSchema({
 
-router.put('/putPelicula/:id',
+        titulo: {
+            in: ['body'],
+            isString: true,
+            isLength: {
+                options:{max:250},
+                errorMessage: 'Titulo debe ser mas pequeño de 250 caractrers',
+            },
+            custom: {
+                options: esPeliculaValida,
+            },
+
+            errorMessage: 'Introduce un titulo',
+        },
+        año: {
+                in:['body'],
+                errorMessage: 'Año debe estar en el body',
+            
+            isInt: {
+                options:{min: 1985, max: new Date().getFullYear()},
+                errorMessage: 'El año debe ser entre 1985 y el año actual',
+            },
+        },
+        portada: {
+            in: ['body'], 
+            errorMessage: 'Debes introducir una portada en el body', 
+            isURL: { 
+                errorMessage: 'La portada debe ser una URL válida',
+            },
+        },
+        categoria:{
+                in:['body'],
+                errorMessage: 'Debes introducir una categoria en el body',
+            custom:{
+                options: esCategoriaValida
+            }       
+        },
+
+    }), validarCampos
+    , controladorMetodos.postPelicula);
+
+
+router.put('/update/:id',
     [
         check('id').custom(esIdValido),
         check('titulo').custom(esPeliculaValida),

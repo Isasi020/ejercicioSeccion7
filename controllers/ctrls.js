@@ -33,8 +33,8 @@ const deletePelicula = async(req, res) => {
 
 const putPelicula = async (req, res) =>{
     const { id } = req.params; 
-    const { _id, __v, ...resto } = req.body;
-    const pelicula = await Pelicula.findByIdAndUpdate(id, resto);
+    const { _id, __v, ...updateBody } = req.body;
+    const pelicula = await Pelicula.findByIdAndUpdate(id, updateBody);
     
     res.json({
         msg: 'PUT API - CONTROLADOR',

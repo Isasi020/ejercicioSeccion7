@@ -6,24 +6,18 @@ const { ObjectId } = mongoose.Types;
 
 const esPeliculaValida = async(titulo = '') => {
 
-    if(titulo.length<1){
-        throw new Error(`Titulo vacio`);
-    }
-    
     const existeTitulo = await Pelicula.findOne({titulo});
     if(existeTitulo){
         throw new Error(`La pelicula ${titulo}, ya existe`);
     }
 };
 
-const esCategoriaValida = async(categoria = '') =>{
-    const categoriasValidas = await Categoria.find().select('categoria');
-
-    const existeCategoria = await Categoria.findOne({categoria});
-    if (!existeCategoria) {
+const esCategoriaValida = async(categoria  = '') =>{
+    const categoriasValidas = Categoria.schema.path('categoria').enumValues; 
+    if (!categoriasValidas.includes(categoria)) {
         throw new Error(
             "Debes introducir una categoría válida de las siguientes:  " + 
-            categoriasValidas.map(c => c.categoria)
+            categoriasValidas           
          )
     }
 };
