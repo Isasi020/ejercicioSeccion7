@@ -3,13 +3,16 @@ const cors = require("cors");
 const path = require("path");
 const routeApi = require("../routes/routeApi");
 const routeView = require("../routes/routeView");
-
+const { dbConnection } = require('../database/config');
 
 class Server {
   constructor() {
     this.app = express();
     this.puerto = process.env.PORT;
     this.moviePath = "/api/movies";
+
+    this.conectarDB();
+
     this.middleware();
     this.getRouteApi();
     this.getRouteView();
@@ -20,6 +23,10 @@ class Server {
     this.app.use(express.json());
     this.app.use(express.static("public"));
   }
+
+  async conectarDB() {
+      await dbConnection();
+    }
 
   getRouteApi(){
     this.app.use(this.moviePath, routeApi);

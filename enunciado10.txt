@@ -1,0 +1,7 @@
+- Añadir autenticación a la api creada en el ejercicio de la sección 9.
+- Creación de los siguientes roles:
+    - ROL_USER: listar
+    - ROL_EDITOR: listar, crear y editar
+    - ROL_ADMIN: listar, crear, editar y eliminar
+Hay que proteger las rutas en funcion de los permisos de cada rol pej:
+/delete solo ROLE_ADMIN.

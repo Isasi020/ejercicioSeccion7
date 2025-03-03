@@ -1,0 +1,13 @@
+Ejercicio sección 9:
+- Crear 2 colecciones en Mongo: Películas, Categorías.
+- Crear un CRUD de películas (middlewares, misma gestión de código que sección 8). 
+- Configurar POSTMAN para el CRUD.
+Schema Peliculas (todos obligatorios):
+    - Título: (max 255 chars)
+    - Año de lanzamiento: (mayor que 1895 y menor o igual que el año actual)
+    - Portada: URL con imagen de la portada de la película 
+    - Categorías: Máximo 4 categorías.
+    - ID (object id)
+Schema Categorias (todos obligatorios):
+    - Nombre: (max 255 chars)
+    - ID (object id)
