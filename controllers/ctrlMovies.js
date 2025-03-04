@@ -1,7 +1,7 @@
 const path = require('path');
 const Pelicula = require('../models/pelicula');
 
-const getListaPeliculas = async (req, res) => {
+const listMovies = async (req, res) => {
     const lista = await Pelicula.find();
     res.json({
         msg: 'GET-API -CONTROLADOR',
@@ -9,7 +9,7 @@ const getListaPeliculas = async (req, res) => {
     });
 };
 
-const postPelicula = async (req, res) => {
+const createMovie = async (req, res) => {
     const { titulo, año, portada, categoria } = req.body;
     const nuevaPelicula = new Pelicula ({titulo, año, portada, categoria});
     await nuevaPelicula.save();
@@ -20,7 +20,7 @@ const postPelicula = async (req, res) => {
         });
 };
 
-const deletePelicula = async(req, res) => {
+const deleteMovie = async(req, res) => {
     const {id} = req.query;
     const idPelicula = await Pelicula.findByIdAndDelete(id);
 
@@ -31,7 +31,7 @@ const deletePelicula = async(req, res) => {
     })
 };
 
-const putPelicula = async (req, res) =>{
+const updateMovie = async (req, res) =>{
     const { id } = req.params; 
     const { _id, __v, ...updateBody } = req.body;
     const pelicula = await Pelicula.findByIdAndUpdate(id, updateBody);
@@ -42,6 +42,7 @@ const putPelicula = async (req, res) =>{
         pelicula
     })
 };
+
 
 const ctrlPaginaInicio = (req, res) => {
   res.sendFile(path.join(__dirname, "../view", "home.html"));
@@ -54,10 +55,10 @@ const ctrlPaginaNoEncontrada = (req, res) => {
 const controladorMetodos = {
     ctrlPaginaInicio,
     ctrlPaginaNoEncontrada,
-    postPelicula,
-    getListaPeliculas,
-    deletePelicula,
-    putPelicula
+    createMovie,
+    listMovies,
+    deleteMovie,
+    updateMovie
 }
 
 module.exports = controladorMetodos;
