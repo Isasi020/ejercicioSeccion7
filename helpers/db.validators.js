@@ -1,5 +1,7 @@
 const Pelicula = require ('../models/pelicula');
 const Categoria = require ('../models/categoria');
+const User = require('../models/user');
+const Role = require('../models/role');
 const mongoose = require ('mongoose');
 const { ObjectId } = mongoose.Types;
 
@@ -34,17 +36,42 @@ const esIdValido = async (id) => {
 
     const existeId = await Pelicula.findById(id);
     if (!existeId) {
-        //guardamos
         throw new Error(`El id ${id} no existe`)
     }
 };
 
+const esRolValido = async(role='') => {
 
+    if(role){
+        const existeRol = await Role.findOne({role});
+        if(!existeRol){
+            throw new Error(`El rol ${role} no esta registrado en la base de datos` );
+        }
+    }
+}
 
+const emailExiste = async(correo = '') => { 
+    const existeEmail = await User.findOne({correo});
+       if(existeEmail){
+           //guardamos
+           throw new Error(`El email ${correo} ya estaba registrado`)
+       }
+}
 
+const existeUsuarioPorId = async(_id) => { 
+   const existeUsuario = await User.findById(_id);
+
+      if(!existeUsuario){
+          //guardamos
+          throw new Error(`El id ${_id} no existe`)
+      }
+}
 
 module.exports = {
     esPeliculaValida,
     esCategoriaValida,
-    esIdValido
+    esIdValido,
+    esRolValido,
+    emailExiste,
+    existeUsuarioPorId
 }
