@@ -3,6 +3,8 @@ const cors = require("cors");
 const path = require("path");
 const routeApi = require("../routes/routeApi");
 const routeView = require("../routes/routeView");
+const routeAuthentication = require("../routes/routeAuth");
+const routeUser = require('../routes/routeUser');
 const { dbConnection } = require('../database/config');
 
 class Server {
@@ -10,12 +12,17 @@ class Server {
     this.app = express();
     this.puerto = process.env.PORT;
     this.moviePath = "/api/movies";
+    this.authPath = "/api/auth";
+    this.userPath = "/api/user";
+
 
     this.conectarDB();
 
     this.middleware();
     this.getRouteApi();
+    this.getRouteUser();
     this.getRouteView();
+    this.getRouteAuthentication();
   }
 
   middleware() {
@@ -34,6 +41,14 @@ class Server {
 
   getRouteView(){
     this.app.use("/", routeView);
+  }
+
+  getRouteAuthentication(){
+    this.app.use(this.authPath, routeAuthentication);
+  }
+
+  getRouteUser(){
+    this.app.use(this.userPath, routeUser);
   }
 
   listen() {

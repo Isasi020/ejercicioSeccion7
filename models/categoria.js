@@ -10,6 +10,5 @@ const CategoriaSchema = Schema(
             enum: ["terror", "suspense", "accion", "ciencia ficcion", "drama", "comedia", "misterio", "romantica"]
         }
     }
-);
-
+)
 module.exports = model('Categoria', CategoriaSchema);
