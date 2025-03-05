@@ -14,10 +14,11 @@ router.get('/', usuarioGet);
 
 
 router.post('/', [
+    validatorJWT,
     check('email').isEmail(),
     check('name', 'Name has not be empty').not().isEmpty(),
     check('password', 'Password has a min of 6 words').isLength({min:6}),
-    check('role').custom( esRolValido ),
+    check('role').optional().default('ROLE_USER').custom( esRolValido ),
     validarCampos
 ], usuarioPost);
 

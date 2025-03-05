@@ -18,36 +18,41 @@ const usuarioGet = async (req, res = response) => {
 
 const usuarioPost = async (req, res = response) => {
 
-    const {name, email, password, role} = req.body;
-    const user = new User({name, email, password, role});
-
-    const salt  = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync(password, salt)
-
-    await user.save();
-
-    res.json({
-        msg: 'POST API - CONTROLADOR',
-        user
-        
-    });
+    try {
+        const {name, email, password, role} = req.body;
+        const user = new User({name, email, password, role});
+    
+        const salt  = bcryptjs.genSaltSync();
+        user.password = bcryptjs.hashSync(password, salt)
+    
+        await user.save();
+    
+        res.json({
+            msg: 'POST API - CONTROLADOR',
+            user
+        });
+    } catch (error) {
+        console.log('hubo un error al crear usuario', error);
+        res.status(400).json({
+            msg: 'Error al crear usuario'
+        })
+    }
 }
-
 
 const usuarioPut = async (req, res = response) => {
     const { id } = req.params;
-    const { password, ...resto } = req.body;
+    const { password, ...updateBody } = req.body;
 
     if (password) {
         if (password.length < 6) {
             return res.status(400).json({ msg: "La contraseña debe tener al menos 6 caracteres" });
         }
         const salt = bcryptjs.genSaltSync();
-        resto.password = bcryptjs.hashSync(password, salt);
+        updateBody.password = bcryptjs.hashSync(password, salt);
     }
 
     try {
-        const user = await User.findByIdAndUpdate(id, resto, { new: true });
+        const user = await User.findByIdAndUpdate(id, updateBody, { new: true });
         res.json({
             msg: "PUT API - CONTROLADOR",
             id,
@@ -61,14 +66,12 @@ const usuarioPut = async (req, res = response) => {
 };
 
 const usuarioDelete = async (req, res = response) => {
-    const {_id} = req.params;
-    console.log('id desde delete ' + _id);
+  
     const { id } = req.params;
     console.log('id desde delete ' + id);
     const user =await User.findByIdAndUpdate(id, {estado:false});
     const usuarioAutenticado = req.user;
 
-    
     res.json({
         msg: 'DELETE API - CONTROLADOR',
         id,
@@ -76,6 +79,7 @@ const usuarioDelete = async (req, res = response) => {
         usuarioAutenticado
     });
 }
+
 const usuarioPatch = (req, res = response) => {
     res.json({
         msg: 'PATCH API - CONTROLADOR'

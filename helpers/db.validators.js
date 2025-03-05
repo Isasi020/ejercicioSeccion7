@@ -40,14 +40,12 @@ const esIdValido = async (id) => {
     }
 };
 
-const esRolValido = async(role='') => {
 
-    if(role){
+const esRolValido = async(role) => {
         const existeRol = await Role.findOne({role});
         if(!existeRol){
             throw new Error(`El rol ${role} no esta registrado en la base de datos` );
         }
-    }
 }
 
 const emailExiste = async(correo = '') => { 
@@ -60,7 +58,6 @@ const emailExiste = async(correo = '') => {
 
 const existeUsuarioPorId = async(_id) => { 
    const existeUsuario = await User.findById(_id);
-
       if(!existeUsuario){
           //guardamos
           throw new Error(`El id ${_id} no existe`)

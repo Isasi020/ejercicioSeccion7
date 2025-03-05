@@ -8,6 +8,7 @@ const checkRole = (...rolesAllowed) => {
         try {
 
             const { role } = await req.user;
+            console.log(req.user);
             console.log('role extracted: ' + role);
 
             if (!rolesAllowed.includes(role)) {
