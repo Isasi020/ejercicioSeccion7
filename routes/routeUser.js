@@ -12,7 +12,6 @@ const router  =  Router();
 // Rutas de la aplicación
 router.get('/', usuarioGet);
 
-
 router.post('/', [
     validatorJWT,
     check('email').isEmail(),

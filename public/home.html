@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INICIO</title>
+    <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+
+<body>
+    <h1>Google sign in</h1>
+
+    <div id="g_id_onload"
+        data-client_id="55249761354-4lpo6sdpeacppv8o3pvccmqdlglb5pvs.apps.googleusercontent.com"
+        data-auto_prompt="false"
+        data-login_uri ="http://localhost:8080/api/auth/google" 
+        data-ux_mode="redirect">
+        
+    </div>
+    <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+    </div>
+    <button id="google_singout">
+        Signout
+
+    </button>
+
+
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <script>
+        function handleCredentialResponse(response) {
+            
+ 
+            const body = { id_token: response.credential }
+ 
+            fetch('http://localhost:8080/api/auth/google', {
+                method: 'POST',
+                headers: {
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify(body)
+            })
+                .then( resp => resp.json() )
+                .then( resp => {
+                    console.log(resp);
+                    localStorage.setItem('email', resp.user.email);
+
+                })
+                .catch( console.warn );
+      
+        }
+
+        const button = document.getElementById('google_singout');
+        button.onclick = ()=>{
+            console.log(google.accounts.id);
+            google.accounts.id.disableAutoSelect();
+            google.accounts.id.revoke(localStorage.getItem('email'), done =>{
+                console.log('sesion cerrada');
+                localStorage.clear();
+                location.reload();
+            });
+        }
+      </script>
+      <p>
+
+
+    <section>
+        <div>
+            <form id="buscarPeli" action="api/movies/search" method="GET">
+                <div class="form-group">
+                    <label>Introduce el titulo de una película</label>
+                    <input type="text" id="searchInput" name="title">
+                </div>
+                <button type="submit">Enviar</button>
+                <button type="reset">Borrar</button>
+
+            </form>
+
+            <div class="container">
+                <ul id="moviesList">
+                    
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div>
+            <form id="buscarPeliPorId" action="api/movies/find" method="GET">
+                <div class="form-group">
+                    <label>Introduce el id de una película</label>
+                    <input type="text" id="searchInput" name="id">
+                </div>
+                <button type="submit">Enviar</button>
+                <button type="reset">Borrar</button>
+            </form>
+
+            <div class="container">
+                <ul id="infoList" >
+                    
+                    <ul id="sublist">
+
+                    </ul>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="/assets/js/main.js"></script>
+
+</body>
+
+</html>
