@@ -1,11 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const bodyParser = require('body-parser');
 const routeApi = require("../routes/routeApi");
 const routeView = require("../routes/routeView");
 const routeAuthentication = require("../routes/routeAuth");
 const routeUser = require('../routes/routeUser');
-const { dbConnection } = require('../database/config');
+const { dbConnection } = require('../dataBase/config');
 
 class Server {
   constructor() {
@@ -29,6 +30,7 @@ class Server {
     this.app.use(cors({ origin: "http://localhost:8080" }));
     this.app.use(express.json());
     this.app.use(express.static("public"));
+    this.app.use(bodyParser.urlencoded({ extended: true }));
   }
 
   async conectarDB() {

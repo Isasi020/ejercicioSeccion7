@@ -9,8 +9,7 @@ const dbConnection = async ()=>{
         console.log("Base de datos "  + nombreBD + " conectada");
     }catch(error){
         console.log(error);
-        throw new error ('Error al intentar conectar con la base de datos');
-
+        throw new Error('Error al intentar conectar con la base de datos');
     }
 }
 module.exports = {
