@@ -7,8 +7,9 @@ const router = Router();
 
  router.post("/login", login );
 
- router.post('/google',[
-    check('id_token', 'id_token de google es necesario').notEmpty(),
+ router.post('/google'
+    ,[
+    check('credential', 'id_token/credential de google es necesario').notEmpty(),
     validarCampos
 ], googleSignIn);
 
